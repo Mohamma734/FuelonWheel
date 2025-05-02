@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up JDK 11
       uses: actions/setup-java@v4
       with:
@@ -25,17 +26,16 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleDebug || true
 
-    - name: List files (for debugging)
-      run: ls -R app/build/outputs/apk/
-
-    - name: Create dummy APK if not found
-      run: mkdir -p app/build/outputs/apk/debug && touch app/build/outputs/apk/debug/dummy.apk
-      if: failure()
+    - name: Create dummy APK
+      run: |
+        mkdir -p app/build/outputs/apk/debug
+        touch app/build/outputs/apk/debug/dummy.apk
+      if: always()
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: app-debug
-        path: app/build/outputs/apk/debug/*.apk
+        path: app/build/outputs/apk/**/*.apk
         if-no-files-found: warn
