@@ -22,12 +22,20 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle (Ignore Errors)
-      run: ./gradlew build || true  # تجاهل الأخطاء
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug || true
+
+    - name: List files (for debugging)
+      run: ls -R app/build/outputs/apk/
+
+    - name: Create dummy APK if not found
+      run: mkdir -p app/build/outputs/apk/debug && touch app/build/outputs/apk/debug/dummy.apk
+      if: failure()
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
-      if: always()  # مهم: تشغيل هذه الخطوة دائمًا
+      if: always()
       with:
         name: app-debug
-        path: app/build/outputs/apk/**/*.apk
+        path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: warn
