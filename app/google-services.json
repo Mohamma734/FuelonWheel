@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "989383154951",
-    "firebase_url": "https://fuel-fe053.firebaseio.com",
-    "project_id": "fuel-fe053",
-    "storage_bucket": "fuel-fe053.appspot.com"
+    "project_number": "134897056996",
+    "project_id": "fuel-fe05",
+    "storage_bucket": "fuel-fe05.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:989383154951:android:5d99f18f77972059",
+        "mobilesdk_app_id": "1:134897056996:android:3ea3147b449d92360f00f1",
         "android_client_info": {
           "package_name": "fire.auth.com.fuelonwheels"
         }
@@ -16,17 +15,12 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB_yCECTD0zQ5NcpJzeCyrfoDpUz4MdD3A"
+          "current_key": "AIzaSyAKByNxNEQ8dW4dlNE16x7wI-5OIAWWkKE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "989383154951-j795afhomiscdpjm7u78laegbi2ai0l3.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
