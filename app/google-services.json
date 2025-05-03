@@ -12,7 +12,20 @@
           "package_name": "fire.auth.com.fuelonwheels"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "134897056996-o7pj80e4m8pravq1d25b638tric4f49e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fire.auth.com.fuelonwheels",
+            "certificate_hash": "22ce3d566b57b6780e7d5837cc6266fb75b61374"
+          }
+        },
+        {
+          "client_id": "134897056996-d3urnoi8rnjd2l0a0u7p55b34ois46d8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAKByNxNEQ8dW4dlNE16x7wI-5OIAWWkKE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134897056996-d3urnoi8rnjd2l0a0u7p55b34ois46d8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
