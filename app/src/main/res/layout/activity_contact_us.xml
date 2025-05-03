@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- بطاقة التواصل -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="الدعم الفني"
+                    android:textSize="20sp"
+                    android:textColor="@color/primary"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- واتساب -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_whatsapp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="+967 73 495 3951"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="openWhatsApp"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <!-- تلجرام -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_telegram"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="@L1234_l"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="openTelegram"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <!-- إيميل -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_email"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="moh734953951@gmail.com"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="openEmail"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <!-- SMS -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_sms"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="إرسال رسالة نصية"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="sendSMS"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <!-- اتصال -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_call"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="اتصل بنا الآن"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="makePhoneCall"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+                <!-- دردشة التطبيق -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <ImageView
+                        android:src="@drawable/ic_chat"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"/>
+                    <TextView
+                        android:text="الدردشة المباشرة"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="8dp"
+                        android:onClick="openChat"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- نموذج إرسال رسالة -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMessage"
+                android:hint="اكتب رسالتك هنا..."
+                android:inputType="textMultiLine"
+                android:minLines="4"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSend"
+            android:text="إرسال"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="start"
+            app:backgroundTint="@color/primary"
+            android:layout_width="match_parent"/>
+
+    </LinearLayout>
+</ScrollView>
