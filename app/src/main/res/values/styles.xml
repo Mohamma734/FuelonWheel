@@ -9,7 +9,7 @@
     </style>
 
     <style name="myBtn">
-        <item name="android:background">@drawable/roundbutton</item>
+        <item name="android:background">@drawable/rou</item>
         <item name="android:textColor">#ffffff</item>
     </style>
 
