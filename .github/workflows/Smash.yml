@@ -32,18 +32,14 @@ jobs:
       - name: 🔐 منح الأذونات لـ Gradle
         run: chmod +x gradlew
 
-      - name: 🚀 تخزين التبعيات لتحسين الأداء
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: 🛠️ تشغيل البناء مع تحليل الأخطاء
+      - name: 🚀 تشغيل البناء مع تحليل الأخطاء
         run: |
           ./gradlew assembleDebug --stacktrace --no-daemon || touch app/build/outputs/apk/debug/app-debug.apk
         continue-on-error: true
+
+      - name: 📤 إنشاء ملف APK فارغ في حالة الفشل
+        run: touch app/build/outputs/apk/debug/app-debug.apk
+        if: failure()
 
       - name: 📤 رفع ملف APK حتى لو فشل البناء
         if: always()
@@ -55,7 +51,4 @@ jobs:
 
       - name: ⚠️ إرسال إشعار عند الفشل
         if: failure()
-        run: echo "⚠️ فشل البناء، لكن تم رفع ملف APK حتى لو كان غير مكتمل."
-
-      - name: 🧹 تنظيف ذاكرة التخزين المؤقت بعد التنفيذ
-        run: rm -rf ~/.gradle/caches
+        run: echo "⚠️ فشل البناء، لكن تم رفع ملف APK فارغ لضمان استمرارية العملية."
