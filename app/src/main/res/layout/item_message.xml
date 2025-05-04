@@ -13,5 +13,4 @@
         android:background="@drawable/message_background"
         android:padding="12dp"
         android:textColor="@color/black"/>
-
 </LinearLayout>
