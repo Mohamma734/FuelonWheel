@@ -1,3 +1,4 @@
+package fire.auth.com.fuelonwheels;
 import java.util.Date;
 
 public class Message {
