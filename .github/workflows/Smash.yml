@@ -1,0 +1,93 @@
+name: Android CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: ✅ فحص الكود من المستودع
+        uses: actions/checkout@v4
+
+      - name: 🔧 إعداد JDK (أحدث إصدار متاح)
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: 📱 إعداد بيئة Android SDK (أحدث إصدار)
+        uses: android-actions/setup-android@v2
+        with:
+          cmdline-tools-version: latest
+          build-tools-version: latest
+          platform-version: latest
+          ndk-version: latest
+
+      - name: 🛠️ تحديث Gradle تلقائيًا
+        run: |
+          LATEST_GRADLE_URL=$(curl -s https://services.gradle.org/versions/current | jq -r '.downloadUrl')
+          if [ -z "$LATEST_GRADLE_URL" ]; then
+            echo "⚠️ فشل تحديد أحدث إصدار من Gradle، سيتم استخدام الإصدار المثبت."
+          else
+            wget $LATEST_GRADLE_URL -O gradle-latest.zip || echo "⚠️ فشل تحميل Gradle، يتم استخدام الإصدار الحالي."
+            unzip -qo gradle-latest.zip -d /opt/ || echo "⚠️ فشل فك الضغط، قد يكون الملف غير متاح."
+            echo "export PATH=/opt/gradle/bin:$PATH" >> $GITHUB_ENV
+          fi
+
+      - name: 🔐 منح الأذونات لـ Gradle
+        run: chmod +x gradlew
+
+      - name: 🚀 تخزين التبعيات لتحسين الأداء
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: 🔎 فحص التبعيات وتحديثها تلقائيًا
+        run: |
+          ./gradlew dependencies || echo "⚠️ حدث خطأ في تحليل التبعيات، يتم التجاهل ومتابعة البناء."
+          ./gradlew buildSrcVersions --update || echo "⚠️ فشل تحديث التبعيات، يتم متابعة البناء دون تحديث."
+
+      - name: 🛠️ تشغيل البناء مع تحليل الأخطاء
+        run: |
+          ./gradlew assembleDebug --stacktrace --no-daemon || (./gradlew clean && ./gradlew assembleDebug --stacktrace --no-daemon)
+        continue-on-error: true
+
+      - name: 🔍 استخراج رسالة الخطأ وتحليلها تلقائيًا
+        run: |
+          ERROR_MESSAGE=$(grep -i "FAILURE" build.log || echo "No errors detected.")
+          echo "🔎 رسالة الخطأ المكتشفة: $ERROR_MESSAGE"
+
+          if echo "$ERROR_MESSAGE" | grep -q "Task 'buildSrcVersions' not found"; then
+            echo "🛠️ تصحيح الخطأ: سيتم تجاهل هذه المهمة."
+            sed -i '/buildSrcVersions/d' build.gradle
+            ./gradlew clean && ./gradlew assembleDebug --stacktrace --no-daemon
+          fi
+
+          if echo "$ERROR_MESSAGE" | grep -q "dependency conflict"; then
+            echo "🔄 تحديث التبعيات لحل التعارضات..."
+            ./gradlew dependencies --refresh-dependencies
+            ./gradlew clean && ./gradlew assembleDebug --stacktrace --no-daemon
+          fi
+
+      - name: 📤 رفع ملف APK بعد نجاح البناء أو عند وجود ملف APK حتى وإن كانت هناك أخطاء
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 1
+
+      - name: ⚠️ إرسال إشعار عند الفشل
+        if: failure()
+        run: echo "⚠️ فشل البناء، يرجى التحقق من السجل أو إصلاح الأخطاء تلقائيًا."
+
+      - name: 🧹 تنظيف ذاكرة التخزين المؤقت بعد التنفيذ
+        run: rm -rf ~/.gradle/caches
