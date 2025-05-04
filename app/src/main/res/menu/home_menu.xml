@@ -3,12 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_home_black_24dp" android:title="Home" android:id="@+id/homeHome"/>
+        android:id="@+id/homeHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home_black_24dp"
+        app:showAsAction="ifRoom" />
 
-    <item app:showAsAction="ifRoom"
+    <item
+        android:id="@+id/homeProfile"
+        android:title="Profile"
         android:icon="@drawable/ic_person_black_24dp"
-        android:title="Profile" android:id="@+id/homeProfile"/>
-    <item android:title="My Orders" android:id="@+id/homeOrders"/>
-    <item android:title="logout" android:id="@+id/homeLogout"/>
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/homeOrders"
+        android:title="My Orders" />
+
+    <item
+        android:id="@+id/homeLogout"
+        android:title="logout" />
 
 </menu>
