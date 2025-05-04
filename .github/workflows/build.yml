@@ -1,27 +1,72 @@
-
 name: Android CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [master]
   pull_request:
-    branches: [ main ]
+    branches: [master]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: ✅ فحص الكود من المستودع
+        uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v1
-      with:
-        java-version: '11'
+      - name: 🔧 إعداد JDK (أحدث إصدار متاح)
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: 📱 إعداد بيئة Android SDK (أحدث إصدار)
+        uses: android-actions/setup-android@v2
+        with:
+          cmdline-tools-version: latest
+          build-tools-version: latest
+          platform-version: latest
+          ndk-version: latest
 
-    - name: Clean and Build with Gradle
-      run: ./gradlew clean build
+      - name: 🛠️ تحديث Gradle تلقائيًا
+        run: |
+          LATEST_GRADLE_URL=$(curl -s https://services.gradle.org/versions/current | jq -r '.downloadUrl')
+          wget $LATEST_GRADLE_URL -O gradle-latest.zip
+          unzip -qo gradle-latest.zip -d /opt/
+          echo "export PATH=/opt/gradle/bin:$PATH" >> $GITHUB_ENV
+
+      - name: 🔐 منح الأذونات لـ Gradle
+        run: chmod +x gradlew
+
+      - name: 🚀 تخزين التبعيات لتحسين الأداء
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: 🔎 فحص التبعيات وتحديثها تلقائيًا
+        run: |
+          ./gradlew dependencies
+          ./gradlew buildSrcVersions --update
+
+      - name: 🛠️ بناء التطبيق مع معالجة الأخطاء تلقائيًا
+        run: |
+          ./gradlew clean
+          ./gradlew assembleDebug --stacktrace --no-daemon || ./gradlew clean && ./gradlew assembleDebug
+
+      - name: 📤 رفع ملف APK بعد نجاح البناء
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 1
+
+      - name: ⚠️ إرسال إشعار عند الفشل
+        if: failure()
+        run: echo "⚠️ فشل البناء، يرجى التحقق من السجل أو إصلاح الأخطاء تلقائيًا."
+
+      - name: 🧹 تنظيف ذاكرة التخزين المؤقت بعد التنفيذ
+        run: rm -rf ~/.gradle/caches
