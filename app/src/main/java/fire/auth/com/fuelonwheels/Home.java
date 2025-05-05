@@ -55,8 +55,8 @@ public class Home extends AppCompatActivity {
     FirebaseFirestore mFire;
     TextView Name, price;
     Spinner mSpinner, aSpinner;
-    String menu[] = {"Petrol", "Diesel"}, finalType, finalQty;
-    String amount[] = {"1", "2", "3", "4"};
+    String menu[] = {"بترول", "ديزل"}, finalType, finalQty;
+    String amount[] = {"1000", "2000", "3000", "4000"};
     Button mLocationBtn, mOrderBtn;
     EditText et_mLocation;
     FusedLocationProviderClient client;
