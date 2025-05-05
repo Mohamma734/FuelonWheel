@@ -8,8 +8,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.SharedElementCallback;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,15 +28,10 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -55,8 +48,8 @@ public class Home extends AppCompatActivity {
     FirebaseFirestore mFire;
     TextView Name, price;
     Spinner mSpinner, aSpinner;
-    String menu[] = {"Petrol", "Diesel"}, finalType, finalQty;
-    String amount[] = {"1", "2", "3", "4"};
+    String menu[] = {"بترول", "ديزل"}, finalType, finalQty;
+    String amount[] = {"1000", "2000", "3000", "4000"};
     Button mLocationBtn, mOrderBtn;
     EditText et_mLocation;
     FusedLocationProviderClient client;
@@ -66,30 +59,25 @@ public class Home extends AppCompatActivity {
 
     Spinner capacity, fuel_type;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
         requestPermission();
 
         Name = findViewById(R.id.homeName);
         price = findViewById(R.id.price);
         fuel_type = findViewById(R.id.hometype);
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, menu);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, menu);
         fuel_type.setAdapter(arrayAdapter);
 
         capacity = findViewById(R.id.homeCapacity);
-        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, amount);
+        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, amount);
         capacity.setAdapter(arrayAdapter1);
-
-
 
         mFire = FirebaseFirestore.getInstance();
         et_mLocation = findViewById(R.id.et_loction);
-
         mOrderBtn = findViewById(R.id.orderBtn);
 
         fuel_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -100,7 +88,6 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -108,27 +95,20 @@ public class Home extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 finalQty = parent.getSelectedItem().toString();
-                if( finalType.equals("Petrol")) {
-                    int finalRate = Integer.parseInt(finalQty) * 85;
-                    price.setText(String.valueOf(finalRate));
-                }else{
-                    int finalRate = Integer.parseInt(finalQty) * 75;
-                    price.setText(String.valueOf(finalRate));
-                }
-                }
+                int rate = Integer.parseInt(finalQty) * (finalType.equals("بترول") ? 85 : 75);
+                price.setText(String.valueOf(rate));
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
         mOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-                final Date resultdate = new Date(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm", Locale.getDefault());
+                Date resultdate = new Date(System.currentTimeMillis());
 
                 Map<String, Object> orderMap = new HashMap<>();
                 orderMap.put("latitude", String.valueOf(mLocation.getLatitude()));
@@ -137,30 +117,26 @@ public class Home extends AppCompatActivity {
                 orderMap.put("fuel_type", fuel_type.getSelectedItem().toString());
                 orderMap.put("capacity", capacity.getSelectedItem().toString());
                 orderMap.put("dnt", sdf.format(resultdate));
-                orderMap.put("price",price.getText().toString());
-                orderMap.put("uid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                orderMap.put("price", price.getText().toString());
+                orderMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-
-                mFire.collection("orders").add(orderMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-
-                        Toast.makeText(Home.this, "Order Placed Successfully..:)", Toast.LENGTH_SHORT).show();
-
-                        Intent i = new Intent(Home.this,ordersuccessful.class);
-                        i.putExtra("type",fuel_type.getSelectedItem().toString());
-                        i.putExtra("amount",capacity.getSelectedItem().toString());
-                        i.putExtra("location",et_mLocation.getText().toString());
-                        i.putExtra("latitude", String.valueOf(mLocation.getLatitude()));
-                        i.putExtra("Time", String.valueOf(sdf.format(resultdate)));
-                        i.putExtra("price",price.getText().toString());
-                        startActivity(i);
-                    }
-                });
+                mFire.collection("orders").add(orderMap)
+                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                         @Override
+                         public void onSuccess(DocumentReference documentReference) {
+                             Toast.makeText(Home.this, "Order Placed Successfully 😊", Toast.LENGTH_SHORT).show();
+                             Intent i = new Intent(Home.this, ordersuccessful.class);
+                             i.putExtra("type", fuel_type.getSelectedItem().toString());
+                             i.putExtra("amount", capacity.getSelectedItem().toString());
+                             i.putExtra("location", et_mLocation.getText().toString());
+                             i.putExtra("latitude", String.valueOf(mLocation.getLatitude()));
+                             i.putExtra("Time", sdf.format(resultdate));
+                             i.putExtra("price", price.getText().toString());
+                             startActivity(i);
+                         }
+                     });
             }
         });
-
-
 
         geocoder = new Geocoder(this, Locale.getDefault());
         mLocationBtn = findViewById(R.id.getBtn);
@@ -170,96 +146,75 @@ public class Home extends AppCompatActivity {
                 getLocation();
             }
         });
-
     }
 
     private void getLocation() {
-        //location
         client = LocationServices.getFusedLocationProviderClient(this);
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        final LocationCallback mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        //TODO: UI updates.
-                    }
-                }
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Home.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        client.requestLocationUpdates(locationRequest, mLocationCallback, null);
-        client.getLastLocation().addOnSuccessListener(Home.this, new OnSuccessListener<Location>() {
+        client.requestLocationUpdates(locationRequest, new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) return;
+            }
+        }, null);
+        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if(location !=null) {
-
-                    try {
-                        mLocation = location;
-                        List<Address> addresse = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        String city = addresse.get(0).getLocality();
-                        String area = addresse.get(0).getSubLocality();
-                        String country = addresse.get(0).getCountryName();
-                        String state = addresse.get(0).getAdminArea();
-                        if(area != ""){
-                            et_mLocation.setText(area + ", "+city + ", "+state+", "+country);
-                        }else{
-                            et_mLocation.setText(city + ", "+state+", "+country);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
+                if (location == null) {
                     Toast.makeText(Home.this, "Location not found, try again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mLocation = location;
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (!addresses.isEmpty()) {
+                        Address addr = addresses.get(0);
+                        String area = addr.getSubLocality();
+                        String city = addr.getLocality();
+                        String state = addr.getAdminArea();
+                        String country = addr.getCountryName();
+                        et_mLocation.setText((area.isEmpty() ? city : area + ", " + city) + ", " + state + ", " + country);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
-
     }
 
-    private void requestPermission(){
+    private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater menuInflater = new MenuInflater(this);
-        menuInflater.inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.homeHome:
-                startActivity(new Intent(getApplicationContext(), Home.class));
-                break;
-            case R.id.homeProfile:
-                startActivity(new Intent(getApplicationContext(), Profile.class));
-                break;
-            case R.id.homeOrders:
-                startActivity(new Intent(getApplicationContext(), Myorder.class));
-                break;
-            case R.id.homeLogout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-                default:
-                    Toast.makeText(this, "Something went wrong..", Toast.LENGTH_SHORT).show();
+        int id = item.getItemId();
+        if (id == R.id.homeHome) {
+            startActivity(new Intent(this, Home.class));
+        } else if (id == R.id.homeProfile) {
+            startActivity(new Intent(this, Profile.class));
+        } else if (id == R.id.homeOrders) {
+            startActivity(new Intent(this, Myorder.class));
+        } else if (id == R.id.homeLogout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "Something went wrong..", Toast.LENGTH_SHORT).show();
         }
-    return true;
+        return true;
     }
-
-
 }
