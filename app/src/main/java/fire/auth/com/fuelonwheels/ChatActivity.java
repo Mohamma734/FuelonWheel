@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.textfield.TextInputEditText; // استيراد لعنصر النص المُدخل من Material
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,6 +13,10 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+// تأكد من إضافة الاستيرادات الخاصة بالملفات المحلية
+import fire.auth.com.fuelonwheels.ChatAdapter;
+import fire.auth.com.fuelonwheels.Message;
 
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView rvMessages;
