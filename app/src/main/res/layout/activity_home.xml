@@ -94,6 +94,16 @@
                     android:layout_margin="10dp" />
             </LinearLayout>
 
+            <!-- Location Input -->
+            <EditText
+                android:id="@+id/et_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Enter location"
+                android:padding="12dp"
+                android:inputType="textPostalAddress" />
+
             <!-- Price Display -->
             <LinearLayout
                 android:layout_width="match_parent"
