@@ -78,11 +78,11 @@ public class Home extends AppCompatActivity {
         Name = findViewById(R.id.homeName);
         price = findViewById(R.id.price);
         fuel_type = findViewById(R.id.hometype);
-        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, menu);
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, menu);
         fuel_type.setAdapter(arrayAdapter);
 
         capacity = findViewById(R.id.homeCapacity);
-        ArrayAdapter arrayAdapter1 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, amount);
+        ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, amount);
         capacity.setAdapter(arrayAdapter1);
 
 
