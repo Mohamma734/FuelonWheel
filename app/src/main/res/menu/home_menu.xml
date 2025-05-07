@@ -21,13 +21,13 @@
     <item
         android:id="@+id/homeChat"
         android:title="Chat"
-        android:icon="@drawable/ic_chat_black_24dp"
+        android:icon="@drawable/ic_chat"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/homeContactUs"
         android:title="Contact Us"
-        android:icon="@drawable/ic_contact_black_24dp"
+        android:icon="@drawable/ic_call"
         app:showAsAction="ifRoom" />
 
     <item
