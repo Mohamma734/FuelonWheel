@@ -192,6 +192,10 @@ public class Home extends AppCompatActivity {
             startActivity(new Intent(this, Profile.class));
         } else if (id == R.id.homeOrders) {
             startActivity(new Intent(this, Myorder.class));
+        } else if (id == R.id.homeChat) { // اضفنا هنا نقر ChatActivity
+            startActivity(new Intent(this, ChatActivity.class));
+        } else if (id == R.id.homeContactUs) { // اضفنا هنا نقر ContactUsActivity
+            startActivity(new Intent(this, ContactUsActivity.class));
         } else if (id == R.id.homeLogout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, MainActivity.class));
