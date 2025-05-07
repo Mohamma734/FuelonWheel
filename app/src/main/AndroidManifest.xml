@@ -37,24 +37,8 @@
         <activity android:name=".Profile" />
 
         <!-- الأنشطة الإضافية -->
-        <activity
-            android:name=".ChatActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ContactUsActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ContactUsActivity" />
         <activity android:name=".Orders" />
 
         <meta-data
