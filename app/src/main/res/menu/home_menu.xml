@@ -19,7 +19,19 @@
         android:title="My Orders" />
 
     <item
+        android:id="@+id/homeChat"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat_black_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/homeContactUs"
+        android:title="Contact Us"
+        android:icon="@drawable/ic_contact_black_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/homeLogout"
-        android:title="logout" />
+        android:title="Logout" />
 
 </menu>
