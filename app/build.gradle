@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     
     // Play Services
-    implementation 'com.google.android.gms:play-services-location:21.3.0' // <-- تم التحديث
+    implementation 'com.google.android.gms:play-services-location:21.4.0' // <-- تم التحديث
     
     // Testing
     testImplementation 'junit:junit:4.13.2'
