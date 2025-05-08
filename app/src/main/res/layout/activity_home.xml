@@ -9,19 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- اسم المستخدم -->
         <TextView
             android:id="@+id/homeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome, User"
+            android:text="مرحبًا، المستخدم"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
+        <!-- اختيار نوع الوقود -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Fuel Type:" />
+            android:text="اختر نوع الوقود:" />
 
         <Spinner
             android:id="@+id/hometype"
@@ -29,21 +31,27 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
 
+        <!-- إدخال الكمية يدويًا -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Quantity (L):" />
+            android:text="أدخل الكمية المطلوبة (لتر):" />
 
-        <Spinner
-            android:id="@+id/homeCapacity"
+        <EditText
+            android:id="@+id/et_capacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:hint="أدخل الكمية"
+            android:inputType="number"
+            android:background="#f1f1f1"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"/>
 
+        <!-- عرض السعر المحسوب -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price:" />
+            android:text="السعر:" />
 
         <TextView
             android:id="@+id/price"
@@ -54,32 +62,37 @@
             android:padding="8dp"
             android:layout_marginBottom="16dp" />
 
+        <!-- إدخال الموقع -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Location:" />
+            android:text="موقعك:" />
 
         <EditText
-            android:id="@+id/et_loction"
+            android:id="@+id/et_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tap Get Location"
+            android:hint="اضغط على زر تحديد الموقع"
             android:inputType="text"
             android:focusable="false"
+            android:background="#f1f1f1"
+            android:padding="8dp"
             android:layout_marginBottom="16dp" />
 
+        <!-- زر تحديد الموقع -->
         <Button
             android:id="@+id/getBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Get Location"
+            android:text="تحديد الموقع"
             android:layout_marginBottom="16dp" />
 
+        <!-- زر تنفيذ الطلب -->
         <Button
             android:id="@+id/orderBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Place Order"
+            android:text="تنفيذ الطلب"
             android:background="@color/design_default_color_primary"
             android:textColor="#FFFFFF" />
 
